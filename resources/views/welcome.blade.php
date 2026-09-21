@@ -3,7 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SMD University - Learning Management System</title>
+    @php
+        $appName = config('app.name', 'SMD University');
+        $words = preg_split('/\s+/', trim($appName));
+        $initials = count($words) > 1
+            ? strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1) . (isset($words[2]) ? substr($words[2], 0, 1) : ''))
+            : strtoupper(substr($appName, 0, 3));
+    @endphp
+    <title>{{ $appName }} - Learning Management System</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,10 +30,10 @@
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20 text-xs">
-                    SMD
+                    {{ $initials }}
                 </div>
                 <div>
-                    <span class="font-bold text-xl tracking-tight text-white brand-font block leading-none">SMD University</span>
+                    <span class="font-bold text-xl tracking-tight text-white brand-font block leading-none">{{ $appName }}</span>
                     <span class="text-[10px] uppercase font-bold tracking-widest text-indigo-400">Academic LMS Portal</span>
                 </div>
             </div>
@@ -50,97 +57,118 @@
         <div class="text-center space-y-6 max-w-3xl mx-auto">
             <span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
                 <span class="w-2 h-2 rounded-full bg-indigo-400 mr-2 animate-pulse"></span>
-                Academic Year 2026/2027 • University Platform
+                Higher Education Digital Ecosystem
             </span>
             <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight brand-font">
                 Empowering University Education & Research
             </h1>
             <p class="text-slate-400 text-base sm:text-lg leading-relaxed">
-                A unified learning ecosystem designed for modern higher education. Seamlessly connecting academic administrators, faculty lecturers, and students through rich digital classrooms, course curriculum management, and online assessments.
+                A unified learning ecosystem designed for modern higher education. Seamlessly connecting academic administrators, faculty lecturers, and students through rich digital classrooms, curriculum delivery, and virtual sessions.
             </p>
             <div class="flex flex-wrap justify-center gap-4 pt-2">
                 <a href="{{ route('login') }}" class="px-8 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm shadow-xl shadow-indigo-600/25 transition">
-                    Access LMS Portal &rarr;
+                    Access University Portal &rarr;
                 </a>
             </div>
         </div>
 
-        <!-- Demo Accounts Showcase -->
-        <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-8 sm:p-10 space-y-6">
+        <!-- Academic Portals Overview -->
+        <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-8 sm:p-10 space-y-8">
             <div class="text-center max-w-xl mx-auto space-y-2">
-                <h3 class="text-2xl font-bold text-white brand-font">Instant Demo Accounts</h3>
+                <h3 class="text-2xl font-bold text-white brand-font">University Role Portals</h3>
                 <p class="text-xs text-slate-400">
-                    Test each perspective of the university LMS using these seeded accounts (Password: <code class="text-indigo-300 bg-slate-800 px-2 py-0.5 rounded">password</code> for all).
+                    Tailored environments for university administrators, academic faculty, and enrolled students.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Admin Card -->
-                <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-rose-500/50 transition">
-                    <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                            Administrator
-                        </span>
-                        <span class="text-xs text-slate-500">Registrar Office</span>
+                <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-rose-500/50 transition flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                                Administrator
+                            </span>
+                            <span class="text-xs text-slate-500">Governance & Control</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-lg">System Administration</h4>
+                            <p class="text-xs text-slate-400 mt-1">Institutional oversight across all faculties, departments, courses, and security matrices.</p>
+                        </div>
+                        <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-900 pt-3">
+                            <li class="flex items-center gap-2">✓ Manage Faculties & Departments</li>
+                            <li class="flex items-center gap-2">✓ Create & Assign Courses</li>
+                            <li class="flex items-center gap-2">✓ User Directory & Status Control</li>
+                        </ul>
                     </div>
-                    <div>
-                        <h4 class="font-bold text-white text-lg">System Registrar</h4>
-                        <p class="text-xs text-slate-400 font-mono mt-1">admin@university.edu</p>
-                    </div>
-                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-900 pt-3">
-                        <li class="flex items-center gap-2">✓ Manage Faculties & Departments</li>
-                        <li class="flex items-center gap-2">✓ Create & Assign Courses</li>
-                        <li class="flex items-center gap-2">✓ User Directory & Status Control</li>
-                    </ul>
-                    <a href="{{ route('login') }}" class="block text-center py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition">
-                        Login as Admin &rarr;
+                    <a href="{{ route('login') }}" class="block text-center py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition mt-4">
+                        Sign In as Admin &rarr;
                     </a>
                 </div>
 
                 <!-- Lecturer Card -->
-                <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-amber-500/50 transition">
-                    <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                            Faculty / Lecturer
-                        </span>
-                        <span class="text-xs text-slate-500">Computing Dept</span>
+                <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-amber-500/50 transition flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                                Faculty / Lecturer
+                            </span>
+                            <span class="text-xs text-slate-500">Academic Delivery</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-lg">Faculty Instruction</h4>
+                            <p class="text-xs text-slate-400 mt-1">Deliver course syllabus, upload lecture slides, publish live Zoom sessions, and evaluate assignments.</p>
+                        </div>
+                        <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-900 pt-3">
+                            <li class="flex items-center gap-2">✓ Modular Weekly Course Builder</li>
+                            <li class="flex items-center gap-2">✓ Live Zoom Virtual Classrooms</li>
+                            <li class="flex items-center gap-2">✓ Grade Submissions & Give Feedback</li>
+                        </ul>
                     </div>
-                    <div>
-                        <h4 class="font-bold text-white text-lg">Dr. Alan Smith</h4>
-                        <p class="text-xs text-slate-400 font-mono mt-1">dr.smith@university.edu</p>
-                    </div>
-                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-900 pt-3">
-                        <li class="flex items-center gap-2">✓ Course Builder & Module Sections</li>
-                        <li class="flex items-center gap-2">✓ Upload Slides, PDFs & Links</li>
-                        <li class="flex items-center gap-2">✓ Grade Submissions & Give Feedback</li>
-                    </ul>
-                    <a href="{{ route('login') }}" class="block text-center py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition">
-                        Login as Lecturer &rarr;
+                    <a href="{{ route('login') }}" class="block text-center py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition mt-4">
+                        Sign In as Faculty &rarr;
                     </a>
                 </div>
 
                 <!-- Student Card -->
-                <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-emerald-500/50 transition">
-                    <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                            Enrolled Student
-                        </span>
-                        <span class="text-xs text-slate-500">ID: STU2026001</span>
+                <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-emerald-500/50 transition flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                Enrolled Student
+                            </span>
+                            <span class="text-xs text-slate-500">Digital Campus</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-lg">Student Learning</h4>
+                            <p class="text-xs text-slate-400 mt-1">Access lecture notes, download course slides, attend live lectures, and submit coursework.</p>
+                        </div>
+                        <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-900 pt-3">
+                            <li class="flex items-center gap-2">✓ Digital Classroom & Syllabus</li>
+                            <li class="flex items-center gap-2">✓ Attend Live Zoom Lectures</li>
+                            <li class="flex items-center gap-2">✓ Turn in Homework & Track Marks</li>
+                        </ul>
                     </div>
-                    <div>
-                        <h4 class="font-bold text-white text-lg">John Doe</h4>
-                        <p class="text-xs text-slate-400 font-mono mt-1">student1@university.edu</p>
-                    </div>
-                    <ul class="text-xs text-slate-400 space-y-1.5 border-t border-slate-900 pt-3">
-                        <li class="flex items-center gap-2">✓ Digital Classroom & Syllabus</li>
-                        <li class="flex items-center gap-2">✓ Turn in Homework & Lab Files</li>
-                        <li class="flex items-center gap-2">✓ Review Grades & Lecturer Remarks</li>
-                    </ul>
-                    <a href="{{ route('login') }}" class="block text-center py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition">
-                        Login as Student &rarr;
+                    <a href="{{ route('login') }}" class="block text-center py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition mt-4">
+                        Sign In as Student &rarr;
                     </a>
                 </div>
             </div>
+
+            @if(app()->environment('local'))
+                <!-- Development Only Helper (Collapsible) -->
+                <details class="text-center pt-2">
+                    <summary class="text-xs text-slate-500 hover:text-slate-400 cursor-pointer select-none">
+                        Developer Test Credentials (Local Environment Only)
+                    </summary>
+                    <div class="mt-3 p-4 bg-slate-950/90 rounded-2xl border border-slate-800 text-xs text-slate-400 inline-block text-left font-mono space-y-1.5">
+                        <div class="text-indigo-400 font-bold mb-1">Seeded Accounts (Password: <span class="text-white">password</span>):</div>
+                        <div>&bull; Admin: <span class="text-slate-200">admin@university.edu</span></div>
+                        <div>&bull; Lecturer: <span class="text-slate-200">dr.smith@university.edu</span></div>
+                        <div>&bull; Student: <span class="text-slate-200">student1@university.edu</span></div>
+                    </div>
+                </details>
+            @endif
         </div>
 
         <!-- Academic Features Overview -->
@@ -161,7 +189,7 @@
                 </div>
                 <h4 class="text-lg font-bold text-white brand-font">Curriculum & Course Builder</h4>
                 <p class="text-xs text-slate-400 leading-relaxed">
-                    Lecturers organize lessons into modular weekly topics with direct file uploads, video links, and rich markdown lecture notes.
+                    Lecturers organize lessons into modular weekly topics with direct file uploads, video links, and rich lecture notes.
                 </p>
             </div>
 
@@ -179,7 +207,7 @@
 
     <!-- Footer -->
     <footer class="border-t border-slate-800/80 py-8 text-center text-xs text-slate-500">
-        &copy; {{ date('Y') }} SMD University Learning Management System. Built with Laravel 12, Vite & Tailwind CSS.
+        &copy; {{ date('Y') }} {{ $appName }} Learning Management System.
     </footer>
 </body>
 </html>

@@ -26,11 +26,18 @@
         <aside class="w-64 bg-slate-900 text-slate-200 flex flex-col flex-shrink-0 border-r border-slate-800">
             <!-- Brand -->
             <div class="h-16 flex items-center px-6 border-b border-slate-800 gap-3">
+                @php
+                    $appName = config('app.name', 'SMD University');
+                    $words = preg_split('/\s+/', trim($appName));
+                    $initials = count($words) > 1
+                        ? strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1) . (isset($words[2]) ? substr($words[2], 0, 1) : ''))
+                        : strtoupper(substr($appName, 0, 3));
+                @endphp
                 <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow-lg shadow-indigo-600/30">
-                    SMD
+                    {{ $initials }}
                 </div>
-                <div>
-                    <span class="font-bold text-lg tracking-tight text-white brand-font block leading-none">SMD University</span>
+                <div class="overflow-hidden">
+                    <span class="font-bold text-base tracking-tight text-white brand-font block leading-tight truncate">{{ $appName }}</span>
                     <span class="text-[10px] tracking-wider uppercase text-indigo-400 font-semibold">LMS Portal</span>
                 </div>
             </div>
