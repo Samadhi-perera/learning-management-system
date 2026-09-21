@@ -12,6 +12,11 @@
     @endphp
     <title>{{ $appName }} - Learning Management System</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="alternate icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,8 +34,10 @@
     <header class="border-b border-slate-800/80 backdrop-blur bg-slate-950/80 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20 text-xs">
-                    {{ $initials }}
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18C5 19.94 8.13 22 12 22C15.87 22 19 19.94 19 17.18V13.18L12 17.09L5 13.18Z"/>
+                    </svg>
                 </div>
                 <div>
                     <span class="font-bold text-xl tracking-tight text-white brand-font block leading-none">{{ $appName }}</span>

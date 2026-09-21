@@ -7,6 +7,11 @@
 
     <title>{{ $title ?? 'LMS Portal' }} - {{ config('app.name', 'University LMS') }}</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="alternate icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+
     <!-- Google Fonts: Inter & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,13 +33,11 @@
             <div class="h-16 flex items-center px-6 border-b border-slate-800 gap-3">
                 @php
                     $appName = config('app.name', 'SMD University');
-                    $words = preg_split('/\s+/', trim($appName));
-                    $initials = count($words) > 1
-                        ? strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1) . (isset($words[2]) ? substr($words[2], 0, 1) : ''))
-                        : strtoupper(substr($appName, 0, 3));
                 @endphp
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow-lg shadow-indigo-600/30">
-                    {{ $initials }}
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/30 flex-shrink-0">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18C5 19.94 8.13 22 12 22C15.87 22 19 19.94 19 17.18V13.18L12 17.09L5 13.18Z"/>
+                    </svg>
                 </div>
                 <div class="overflow-hidden">
                     <span class="font-bold text-base tracking-tight text-white brand-font block leading-tight truncate">{{ $appName }}</span>
