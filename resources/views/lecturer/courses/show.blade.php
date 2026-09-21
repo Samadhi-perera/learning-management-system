@@ -16,6 +16,10 @@
                     <p class="text-sm text-slate-300 max-w-2xl">{{ $course->description ?? 'No course description provided yet.' }}</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" onclick="document.getElementById('zoom-scheduler-panel').classList.toggle('hidden')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold shadow transition flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        + Schedule Zoom Meeting
+                    </button>
                     <a href="{{ route('lecturer.assignments.create', $course) }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow transition">
                         + Create Assignment
                     </a>
@@ -30,10 +34,188 @@
             </div>
         </div>
 
+        <!-- Zoom Meeting Scheduler Form (Expandable) -->
+        <div id="zoom-scheduler-panel" class="hidden bg-white p-6 rounded-2xl border-2 border-blue-500/30 shadow-md">
+            <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm">Publish New Zoom Meeting</h4>
+                        <p class="text-xs text-slate-400">Enrolled students will see this in their classroom with automated attendance logging.</p>
+                    </div>
+                </div>
+                <button type="button" onclick="document.getElementById('zoom-scheduler-panel').classList.add('hidden')" class="text-slate-400 hover:text-slate-600">
+                    &times;
+                </button>
+            </div>
+
+            <form action="{{ route('lecturer.zoom.store', $course) }}" method="POST" class="space-y-4">
+                @csrf
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Session Topic / Title <span class="text-rose-500">*</span></label>
+                        <input type="text" name="title" placeholder="e.g. Live Lecture 04: Advanced Query Optimization & Indexing" required class="w-full rounded-xl border-slate-200 text-sm px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Date & Start Time <span class="text-rose-500">*</span></label>
+                        <input type="datetime-local" name="start_time" required class="w-full rounded-xl border-slate-200 text-sm px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Duration (Minutes) <span class="text-rose-500">*</span></label>
+                        <input type="number" name="duration_minutes" value="60" min="15" max="480" required class="w-full rounded-xl border-slate-200 text-sm px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Zoom Meeting URL <span class="text-rose-500">*</span></label>
+                        <input type="url" name="meeting_url" placeholder="https://us05web.zoom.us/j/81234567890?pwd=..." required class="w-full rounded-xl border-slate-200 text-sm px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Meeting ID (Optional)</label>
+                        <input type="text" name="meeting_id" placeholder="812 3456 7890" class="w-full rounded-xl border-slate-200 text-sm px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Passcode (Optional)</label>
+                        <input type="text" name="passcode" placeholder="e.g. SMD2026" class="w-full rounded-xl border-slate-200 text-sm px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Session Overview / Agenda</label>
+                        <textarea name="description" rows="2" placeholder="Topics covered, prerequisite readings, or student instructions..." class="w-full rounded-xl border-slate-200 text-sm px-4 py-2.5 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+                    <button type="button" onclick="document.getElementById('zoom-scheduler-panel').classList.add('hidden')" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition shadow-sm flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Publish Zoom Session
+                    </button>
+                </div>
+            </form>
+        </div>
+
         <!-- Course Sections & Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Main Content Area: Curriculum Sections -->
+            <!-- Main Content Area: Zoom Meetings & Curriculum Sections -->
             <div class="lg:col-span-2 space-y-6">
+
+                <!-- Live Zoom Sessions Section -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div class="p-5 bg-gradient-to-r from-blue-50/70 to-indigo-50/50 border-b border-slate-100 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-base">Live Zoom Lectures & Virtual Classrooms</h3>
+                                <p class="text-xs text-slate-500">Real-time online classes with automatic student attendance tracking</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="document.getElementById('zoom-scheduler-panel').classList.toggle('hidden')" class="text-xs font-bold text-blue-600 hover:text-blue-800">
+                            + Schedule Meeting
+                        </button>
+                    </div>
+
+                    <div class="divide-y divide-slate-100">
+                        @forelse($course->zoomMeetings as $meeting)
+                            <div class="p-5 hover:bg-slate-50/60 transition space-y-3">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                    <div class="flex items-center gap-2">
+                                        <h4 class="font-bold text-slate-900 text-sm">{{ $meeting->title }}</h4>
+                                        @if($meeting->isLive())
+                                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500 text-white animate-pulse">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                                                Live Now
+                                            </span>
+                                        @elseif($meeting->isUpcoming())
+                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+                                                Upcoming
+                                            </span>
+                                        @else
+                                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600">
+                                                {{ ucfirst($meeting->status) }}
+                                            </span>
+                                        @endif
+                                    </div>
+
+                                    <div class="text-xs text-slate-500 flex items-center gap-2">
+                                        <span class="font-medium text-slate-700">{{ $meeting->start_time->format('M d, Y @ h:i A') }}</span>
+                                        <span>&bull;</span>
+                                        <span>{{ $meeting->duration_minutes }} mins</span>
+                                    </div>
+                                </div>
+
+                                @if($meeting->description)
+                                    <p class="text-xs text-slate-600 leading-relaxed">{{ $meeting->description }}</p>
+                                @endif
+
+                                <!-- Meeting Info Badges -->
+                                <div class="flex flex-wrap items-center gap-2 text-xs">
+                                    @if($meeting->meeting_id)
+                                        <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-mono text-[11px]">
+                                            ID: {{ $meeting->meeting_id }}
+                                        </span>
+                                    @endif
+                                    @if($meeting->passcode)
+                                        <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-mono text-[11px]">
+                                            Passcode: {{ $meeting->passcode }}
+                                        </span>
+                                    @endif
+                                    <a href="{{ route('lecturer.zoom.roster', $meeting) }}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 font-semibold hover:bg-indigo-100 transition text-[11px]">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                                        {{ $meeting->attendances->count() }} Students Attended
+                                    </a>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
+                                    <div class="flex items-center gap-2">
+                                        <a href="{{ $meeting->meeting_url }}" target="_blank" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                            Start Meeting (Host)
+                                        </a>
+
+                                        <!-- Status Switchers -->
+                                        @if($meeting->status !== 'live')
+                                            <form action="{{ route('lecturer.zoom.status', $meeting) }}" method="POST" class="inline">
+                                                @csrf
+                                                <input type="hidden" name="status" value="live">
+                                                <button type="submit" class="px-3 py-1.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 text-xs font-semibold transition">
+                                                    Mark Live Now
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                        @if($meeting->status !== 'completed')
+                                            <form action="{{ route('lecturer.zoom.status', $meeting) }}" method="POST" class="inline">
+                                                @csrf
+                                                <input type="hidden" name="status" value="completed">
+                                                <button type="submit" class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-semibold transition">
+                                                    End Session
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+
+                                    <form action="{{ route('lecturer.zoom.destroy', $meeting) }}" method="POST" onsubmit="return confirm('Cancel and delete this Zoom session?');" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-xs text-slate-400 hover:text-rose-600 transition">
+                                            Delete Meeting
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="p-6 text-center text-slate-400 text-xs">
+                                No Zoom meetings published for this course yet. Click "+ Schedule Meeting" above to set up a live virtual lecture.
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
                 <!-- Section Header & Add Form -->
                 <div class="flex items-center justify-between">
                     <h3 class="font-bold text-slate-800 text-lg">Curriculum & Course Modules</h3>

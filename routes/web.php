@@ -98,6 +98,12 @@ Route::middleware(['auth', 'role:lecturer,admin'])->prefix('lecturer')->name('le
     Route::get('/grading', [GradingController::class, 'index'])->name('grading.index');
     Route::get('/submissions/{submission}/grade', [GradingController::class, 'show'])->name('grading.show');
     Route::post('/submissions/{submission}/grade', [GradingController::class, 'grade'])->name('grading.store');
+
+    // Zoom Virtual Classrooms
+    Route::post('/courses/{course}/zoom-meetings', [\App\Http\Controllers\ZoomMeetingController::class, 'store'])->name('zoom.store');
+    Route::post('/zoom-meetings/{meeting}/status', [\App\Http\Controllers\ZoomMeetingController::class, 'updateStatus'])->name('zoom.status');
+    Route::delete('/zoom-meetings/{meeting}', [\App\Http\Controllers\ZoomMeetingController::class, 'destroy'])->name('zoom.destroy');
+    Route::get('/zoom-meetings/{meeting}/roster', [\App\Http\Controllers\ZoomMeetingController::class, 'roster'])->name('zoom.roster');
 });
 
 // -------------------------------------------------------------
@@ -118,6 +124,9 @@ Route::middleware(['auth', 'role:student,admin'])->prefix('student')->name('stud
     // Assignment Submissions
     Route::get('/assignments/{assignment}', [StudentSubmissionController::class, 'show'])->name('assignments.show');
     Route::post('/assignments/{assignment}/submit', [StudentSubmissionController::class, 'submit'])->name('assignments.submit');
+
+    // Zoom Attendance & Join
+    Route::get('/zoom-meetings/{meeting}/attend', [\App\Http\Controllers\ZoomMeetingController::class, 'attend'])->name('zoom.attend');
 });
 
 require __DIR__.'/auth.php';

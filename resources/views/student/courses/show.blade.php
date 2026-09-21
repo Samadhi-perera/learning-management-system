@@ -44,6 +44,95 @@
             </div>
         @endif
 
+        <!-- Live Zoom Lectures & Virtual Classrooms -->
+        @if($course->zoomMeetings->isNotEmpty())
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                <div class="p-5 bg-gradient-to-r from-blue-50/70 to-indigo-50/50 border-b border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-base">Virtual Classroom & Live Zoom Lectures</h3>
+                            <p class="text-xs text-slate-500">Attend live online lectures with your course instructor</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divide-y divide-slate-100">
+                    @foreach($course->zoomMeetings as $meeting)
+                        @php
+                            $attendance = $meeting->attendances->first();
+                        @endphp
+                        <div class="p-5 sm:p-6 transition {{ $meeting->isLive() ? 'bg-emerald-50/30' : 'hover:bg-slate-50/60' }}">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div class="space-y-1.5 max-w-xl">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        @if($meeting->isLive())
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-600 text-white animate-pulse shadow-sm">
+                                                <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+                                                Live Now
+                                            </span>
+                                        @elseif($meeting->isUpcoming())
+                                            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+                                                Upcoming
+                                            </span>
+                                        @else
+                                            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-slate-100 text-slate-600">
+                                                Concluded
+                                            </span>
+                                        @endif
+
+                                        <h4 class="font-bold text-slate-900 text-base">{{ $meeting->title }}</h4>
+                                    </div>
+
+                                    <p class="text-xs text-slate-500 flex items-center gap-2">
+                                        <span>Starts: <strong class="text-slate-700">{{ $meeting->start_time->format('l, M d, Y @ h:i A') }}</strong></span>
+                                        <span>&bull;</span>
+                                        <span>Duration: {{ $meeting->duration_minutes }} mins</span>
+                                    </p>
+
+                                    @if($meeting->description)
+                                        <p class="text-xs text-slate-600 leading-relaxed pt-1">{{ $meeting->description }}</p>
+                                    @endif
+
+                                    <!-- Credentials Chips -->
+                                    <div class="flex flex-wrap items-center gap-2 pt-1 text-xs">
+                                        @if($meeting->meeting_id)
+                                            <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-mono text-[11px]">
+                                                Meeting ID: {{ $meeting->meeting_id }}
+                                            </span>
+                                        @endif
+                                        @if($meeting->passcode)
+                                            <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-mono text-[11px]">
+                                                Passcode: {{ $meeting->passcode }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                                    @if($attendance)
+                                        <div class="px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-1.5">
+                                            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                            Attended at {{ $attendance->joined_at->format('h:i A') }}
+                                        </div>
+                                    @endif
+
+                                    <a href="{{ route('student.zoom.attend', $meeting) }}" target="_blank"
+                                        class="px-5 py-2.5 rounded-xl font-bold text-xs transition shadow-sm inline-flex items-center gap-2
+                                        {{ $meeting->isLive() ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-500/20' : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20' }}">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                        {{ $attendance ? 'Re-Join Zoom Session &rarr;' : 'Join & Attend Meeting &rarr;' }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
         <!-- Classroom Layout: Modules on Left, Tasks on Right -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Learning Modules -->

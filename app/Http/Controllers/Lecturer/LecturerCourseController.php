@@ -39,6 +39,7 @@ class LecturerCourseController extends Controller
             'assignments.submissions',
             'announcements.author',
             'students',
+            'zoomMeetings.attendances.user',
         ]);
 
         return view('lecturer.courses.show', compact('course'));

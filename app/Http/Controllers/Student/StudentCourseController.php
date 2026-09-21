@@ -39,6 +39,9 @@ class StudentCourseController extends Controller
                 $q->where('student_id', $student->id);
             },
             'announcements.author',
+            'zoomMeetings.attendances' => function ($q) use ($student) {
+                $q->where('user_id', $student->id);
+            },
         ]);
 
         return view('student.courses.show', compact('course'));

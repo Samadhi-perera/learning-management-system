@@ -73,4 +73,9 @@ class Course extends Model
     {
         return $this->hasMany(Announcement::class)->orderByDesc('is_pinned')->latest();
     }
+
+    public function zoomMeetings(): HasMany
+    {
+        return $this->hasMany(ZoomMeeting::class)->orderBy('start_time', 'asc');
+    }
 }
